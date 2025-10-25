@@ -7,6 +7,7 @@ import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
 import re
 from datetime import timedelta
+import os
 
 app = Flask(__name__)
 app.secret_key = "secret123"  # Required for flash messages
@@ -19,8 +20,8 @@ app.config['MAIL_USERNAME'] = 'deepashreengd@gmail.com'  # Replace with your Gma
 app.config['MAIL_PASSWORD'] = 'gvhw viuj mwyo gjip'  # Replace with Gmail app password
 
 # OAuth config (replace with your Google credentials)
-app.config['GOOGLE_CLIENT_ID'] = 'YOUR_CLIENT_ID'
-app.config['GOOGLE_CLIENT_SECRET'] = 'YOUR_CLIENT_SECRET'
+app.config['GOOGLE_CLIENT_ID'] = os.getenv('GOOGLE_CLIENT_ID', 'YOUR_CLIENT_ID')
+app.config['GOOGLE_CLIENT_SECRET'] = os.getenv('GOOGLE_CLIENT_SECRET', 'YOUR_CLIENT_SECRET')
 
 # Flask-Login
 login_manager = LoginManager()
