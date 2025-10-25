@@ -1,0 +1,343 @@
+/* General body styling */
+body {
+  background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #a8edea 100%);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+  margin: 0;
+  color: #212529;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Navbar styling */
+.navbar {
+  background: linear-gradient(90deg, #ffecd2 0%, #fcb69f 50%, #ff9a9e 100%);
+  border-radius: 0 0 15px 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand {
+  color: #333;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.navbar .btn-outline-light {
+  border-color: rgba(255, 255, 255, 0.8);
+  color: white;
+}
+
+.navbar .btn-outline-light:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: white;
+}
+
+/* Container for content */
+.container {
+  background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
+  border-radius: 20px;
+  padding: 40px;
+  margin-top: 30px;
+  box-shadow: 0 15px 40px rgba(255, 154, 158, 0.3);
+  color: #212529;
+}
+
+/* Buttons */
+.btn {
+  border-radius: 25px;
+  padding: 10px 20px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn-primary {
+  background: linear-gradient(45deg, #667eea, #764ba2);
+  border: none;
+  color: #fff;
+}
+
+.btn-success {
+  background: linear-gradient(45deg, #56ab2f, #a8e6cf);
+  border: none;
+  color: #fff;
+}
+
+.btn-info {
+  background: linear-gradient(45deg, #00c9ff, #92fe9d);
+  border: none;
+  color: #fff;
+}
+
+.btn-warning {
+  background: linear-gradient(45deg, #f093fb, #f5576c);
+  border: none;
+  color: #fff;
+}
+
+.btn-danger {
+  background: linear-gradient(45deg, #ff6b6b, #ffa726);
+  border: none;
+  color: #fff;
+}
+
+.btn-outline-light {
+  border-color: rgba(255, 255, 255, 0.8);
+  color: white;
+}
+
+.btn-outline-light:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: white;
+}
+
+/* Cards */
+.card {
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(255, 154, 158, 0.2);
+  border: none;
+  background: rgba(255, 255, 255, 0.9);
+  transition: all 0.3s ease;
+}
+
+.auth-page .card {
+  background: white !important;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ddd;
+  color: #212529;
+}
+
+/* Category products page cards */
+.category-products-page .card {
+  background: rgba(255, 255, 255, 0.5) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #212529;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(255, 154, 158, 0.3);
+}
+
+.card-body {
+  padding: 2rem;
+}
+
+/* Icon styling */
+.card i {
+  margin-bottom: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.card:hover i {
+  transform: scale(1.1);
+}
+
+/* Headings */
+h2 {
+  color: #495057;
+  font-weight: 700;
+  margin-bottom: 30px;
+}
+
+/* List group items */
+.list-group-item {
+  border-radius: 10px;
+  margin-bottom: 10px;
+  border: none;
+  background: rgba(255, 255, 255, 0.8);
+  transition: all 0.3s ease;
+}
+
+.list-group-item:hover {
+  background: rgba(255, 154, 158, 0.1);
+  transform: translateX(5px);
+}
+
+/* Table styling */
+.table {
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(255, 154, 158, 0.1);
+}
+
+.table thead {
+  background: linear-gradient(90deg, #ff9a9e, #fecfef);
+  color: white;
+}
+
+.table tbody tr:hover {
+  background-color: rgba(255, 154, 158, 0.1);
+  transition: background-color 0.3s ease;
+}
+
+/* Badges */
+.badge {
+  font-size: 0.9rem;
+  padding: 0.5em 0.8em;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+.badge.bg-danger {
+  background: linear-gradient(45deg, #ff6b6b, #ffa726);
+  color: white;
+}
+
+.badge.bg-warning {
+  background: linear-gradient(45deg, #f093fb, #f5576c);
+  color: white;
+}
+
+.badge.bg-success {
+  background: linear-gradient(45deg, #56ab2f, #a8e6cf);
+  color: white;
+}
+
+/* Form container */
+.form-control {
+  border-radius: 10px;
+  border: 2px solid #e9ecef;
+  padding: 12px;
+  transition: border-color 0.3s ease;
+}
+
+.form-control:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 10px rgba(102, 126, 234, 0.25);
+}
+
+/* Animation for fade in */
+.fade-in {
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Logo font styling */
+.logo-font {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+}
+
+/* Responsive table wrapper */
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 768px) {
+  .card-body {
+    padding: 1.5rem !important;
+  }
+  h1.logo-font {
+    font-size: 2rem !important;
+  }
+  .container {
+    padding: 20px !important;
+    margin-top: 10px !important;
+    border-radius: 10px !important;
+  }
+  .btn {
+    padding: 8px 16px !important;
+    font-size: 0.9rem !important;
+  }
+  table {
+    font-size: 0.85rem !important;
+  }
+  .fa-3x {
+    font-size: 2.5rem !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .col-md-6 {
+    width: 100% !important;
+    padding: 0 10px !important;
+  }
+  h3 {
+    font-size: 1.25rem !important;
+  }
+  .fade-in {
+    animation-duration: 0.3s !important;
+  }
+  .input-group-text i {
+    font-size: 1rem !important;
+  }
+  .form-label {
+    font-size: 0.9rem !important;
+  }
+}
+
+/* Ensure navbar responsiveness if used */
+.navbar-nav {
+  flex-direction: column;
+  align-items: center;
+}
+
+@media (min-width: 992px) {
+  .navbar-nav {
+    flex-direction: row;
+  }
+}
+
+/* Auth page background for login and signup */
+.auth-page {
+  background-image: url('/static/images/warehouse-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+.auth-page::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: -1;
+}
+
+.auth-page .container {
+  background: transparent !important;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.auth-page .container h2, .auth-page .container h4, .auth-page .container h5 {
+  color: white;
+}
+
+/* Password strength indicator */
+.password-strength {
+  margin-top: 5px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.weak {
+  color: #dc3545 !important;
+}
+
+.medium {
+  color: #ffc107 !important;
+}
+
+.strong {
+  color: #28a745 !important;
+}

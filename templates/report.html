@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Report - Stock Sync</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="auth-page">
+<div class="container mt-5 fade-in">
+  <div class="row justify-content-center">
+    <div class="col-md-12">
+      <div class="card p-5">
+        <div class="text-center mb-4">
+          <i class="fas fa-chart-bar fa-3x text-primary mb-3"></i>
+          <h3 class="fw-bold">Stock Report</h3>
+          <p class="text-muted">View detailed inventory report</p>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" title="Close alert" aria-label="Close"></button>
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <!-- Charts Section -->
+        <div class="row mb-4">
+          <div class="col-md-6">
+            <h5 class="text-center mb-3">Stock Levels by Category</h5>
+            <canvas id="categoryChart" width="400" height="300"></canvas>
+          </div>
+          <div class="col-md-6">
+            <h5 class="text-center mb-3">Low Stock Alerts</h5>
+            <canvas id="lowStockChart" width="400" height="300"></canvas>
+          </div>
+        </div>
+
+        <div class="row mb-4">
+          <div class="col-md-6">
+            <h5 class="text-center mb-3">Product Quantities</h5>
+            <canvas id="quantityChart" width="400" height="300"></canvas>
+          </div>
+          <div class="col-md-6">
+            <h5 class="text-center mb-3">Sales Revenue</h5>
+            <canvas id="salesChart" width="400" height="300"></canvas>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead class="table-dark">
+              <tr>
+                <th>ID</th><th>Name</th><th>Category</th><th>Quantity</th><th>Price</th><th>Threshold</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for p in products %}
+              <tr>
+                <td>{{ p['product_id'] }}</td>
+                <td>{{ p['name'] }}</td>
+                <td>{{ p['category'] }}</td>
+                <td>{{ p['quantity'] }}</td>
+                <td>₹{{ p['price'] }}</td>
+                <td>{{ p['threshold'] }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+    <div class="mt-3 text-center">
+      <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-secondary"><i class="fas fa-arrow-left me-2"></i>Back to Dashboard</a>
+    </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Prepare data for charts
+    const products = {{ products|tojson|safe }};
+    const sales = {{ sales|tojson|safe }};
+    const categories = {};
+    const lowStockProducts = [];
+    const productNames = [];
+    const productQuantities = [];
+    const salesDates = [];
+    const salesRevenue = [];
+
+    products.forEach(product => {
+      // Group by category
+      if (!categories[product.category]) {
+        categories[product.category] = 0;
+      }
+      categories[product.category] += product.quantity;
+
+      // Check for low stock
+      if (product.quantity <= product.threshold) {
+        lowStockProducts.push({
+          name: product.name,
+          quantity: product.quantity,
+          threshold: product.threshold
+        });
+      }
+
+      // Product quantities
+      productNames.push(product.name);
+      productQuantities.push(product.quantity);
+    });
+
+    sales.forEach(sale => {
+      salesDates.push(sale.date);
+      salesRevenue.push(sale.revenue);
+    });
+
+    // Category Chart
+    const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+    new Chart(categoryCtx, {
+      type: 'pie',
+      data: {
+        labels: Object.keys(categories),
+        datasets: [{
+          data: Object.values(categories),
+          backgroundColor: [
+            '#FF6384',
+            '#36A2EB',
+            '#FFCE56',
+            '#4BC0C0',
+            '#9966FF',
+            '#FF9F40'
+          ]
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'bottom',
+          },
+          title: {
+            display: true,
+            text: 'Stock Distribution by Category'
+          }
+        }
+      }
+    });
+
+    // Low Stock Chart
+    const lowStockCtx = document.getElementById('lowStockChart').getContext('2d');
+    new Chart(lowStockCtx, {
+      type: 'bar',
+      data: {
+        labels: lowStockProducts.map(p => p.name),
+        datasets: [{
+          label: 'Current Stock',
+          data: lowStockProducts.map(p => p.quantity),
+          backgroundColor: '#FF6384'
+        }, {
+          label: 'Threshold',
+          data: lowStockProducts.map(p => p.threshold),
+          backgroundColor: '#FFCE56'
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          title: {
+            display: true,
+            text: 'Low Stock Products'
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+
+    // Quantity Chart
+    const quantityCtx = document.getElementById('quantityChart').getContext('2d');
+    new Chart(quantityCtx, {
+      type: 'line',
+      data: {
+        labels: productNames,
+        datasets: [{
+          label: 'Quantity',
+          data: productQuantities,
+          borderColor: '#36A2EB',
+          backgroundColor: 'rgba(54, 162, 235, 0.2)',
+          tension: 0.1
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          title: {
+            display: true,
+            text: 'Product Quantities Overview'
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+
+    // Sales Chart
+    const salesCtx = document.getElementById('salesChart').getContext('2d');
+    new Chart(salesCtx, {
+      type: 'line',
+      data: {
+        labels: salesDates,
+        datasets: [{
+          label: 'Revenue',
+          data: salesRevenue,
+          borderColor: '#4BC0C0',
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          tension: 0.1
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          title: {
+            display: true,
+            text: 'Sales Revenue Over Time'
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              callback: function(value) {
+                return '₹' + value;
+              }
+            }
+          }
+        }
+      }
+    });
+  });
+</script>
+</body>
+</html>

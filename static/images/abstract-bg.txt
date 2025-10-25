@@ -1,0 +1,10 @@
+You need to manually download a suitable abstract or geometric background image and save it as 'abstract-bg.jpg' in the 'static/images/' directory of your project. 
+
+Here are some recommended free image sources:
+- https://unsplash.com/s/photos/abstract-background
+- https://www.pexels.com/search/abstract%20background/
+- https://pixabay.com/images/search/abstract%20background/
+
+After downloading, rename the image to 'abstract-bg.jpg' and place it in the 'static/images/' folder.
+
+Unfortunately, I cannot create or upload binary image files directly.

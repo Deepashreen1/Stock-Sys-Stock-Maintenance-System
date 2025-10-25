@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Search Product</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="dashboard-body">
+  <!-- Header -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
+    <div class="container-fluid">
+      <a class="navbar-brand d-flex align-items-center" href="#">
+        <div class="logo-icon me-2">
+          <i class="fas fa-boxes text-primary"></i>
+        </div>
+        <span class="fw-bold text-primary">Stock Sys</span>
+      </a>
+      <div class="d-flex align-items-center">
+        <span class="text-muted me-3">Welcome, {{ username }}</span>
+        <div class="dropdown">
+          <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" title="User Menu">
+            <i class="fas fa-user me-1"></i>
+          </button>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/profile"><i class="fas fa-user me-2"></i>Profile</a></li>
+            <li><a class="dropdown-item" href="/settings"><i class="fas fa-cog me-2"></i>Settings</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="/logout"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-4">
+    <div class="row">
+      <!-- Main Content -->
+      <div class="col-12">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" title="Close alert" aria-label="Close"></button>
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <!-- Search Card -->
+        <div class="row mb-4">
+          <div class="col-12">
+            <div class="welcome-card">
+              <div class="welcome-content">
+                <i class="fas fa-search welcome-icon"></i>
+                <h4 class="welcome-title">Search Products</h4>
+                <p class="welcome-text">Find products by name.</p>
+                <form method="GET" action="/search">
+                  <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="q" placeholder="Enter product name..." required>
+                    <button type="submit" class="btn btn-primary">Search</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {% if products %}
+        <!-- Search Results -->
+        <div class="row">
+          <div class="col-12">
+            <div class="quick-actions-card">
+              <div class="quick-actions-header">
+                <h5 class="mb-0"><i class="fas fa-list me-2"></i>Search Results</h5>
+              </div>
+              <div class="quick-actions-content">
+                <div class="table-responsive">
+                  <table class="table table-striped table-hover">
+                    <thead class="table-dark">
+                      <tr>
+                        <th>ID</th><th>Name</th><th>Category</th><th>Quantity</th><th>Price</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for p in products %}
+                      <tr>
+                        <td>{{ p['product_id'] }}</td>
+                        <td>{{ p['name'] }}</td>
+                        <td>{{ p['category'] }}</td>
+                        <td>{{ p['quantity'] }}</td>
+                        <td>₹{{ p['price'] }}</td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+
+        <!-- Quick Actions -->
+        <div class="row">
+          <div class="col-12">
+            <div class="quick-actions-card">
+              <div class="quick-actions-header">
+                <h5 class="mb-0"><i class="fas fa-bolt me-2"></i>Quick Actions</h5>
+              </div>
+              <div class="quick-actions-content">
+                <a href="{{ url_for('user_dashboard') }}" class="quick-action-btn">
+                  <i class="fas fa-home me-3"></i>
+                  <span>Back to Dashboard</span>
+                  <i class="fas fa-chevron-right ms-auto"></i>
+                </a>
+                <a href="{{ url_for('view_cart') }}" class="quick-action-btn">
+                  <i class="fas fa-shopping-cart me-3"></i>
+                  <span>View Cart ({{ cart_items|length }})</span>
+                  <i class="fas fa-chevron-right ms-auto"></i>
+                </a>
+                <a href="/logout" class="quick-action-btn text-danger">
+                  <i class="fas fa-sign-out-alt me-3"></i>
+                  <span>Logout</span>
+                  <i class="fas fa-chevron-right ms-auto"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+/* Dashboard Body */
+.dashboard-body {
+  background-image: url('/static/images/warehouse-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+  margin: 0;
+  color: #212529;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.dashboard-body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(245, 243, 239, 0);
+  z-index: -1;
+}
+
+/* Header Styles */
+.navbar {
+  background: linear-gradient(90deg, #B7791F 0%, #C68A2A 50%, #D39B35 100%);
+  border-radius: 0 0 15px 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  background-color: transparent !important;
+}
+
+.logo-icon {
+  font-size: 1.5rem;
+}
+
+/* Welcome Card */
+.welcome-card {
+  background: #FFFFFF;
+  border-radius: 15px;
+  padding: 2rem;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  border: 1px solid #E4DCCF;
+  color: #2E2E2E;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.welcome-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+.welcome-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.welcome-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  color: #6B8E23;
+  transition: transform 0.3s ease;
+}
+
+.welcome-card:hover .welcome-icon {
+  transform: scale(1.1);
+}
+
+.welcome-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #2E2E2E;
+}
+
+.welcome-text {
+  font-size: 1rem;
+  color: #5F5F5F;
+  margin-bottom: 0;
+}
+
+/* Quick Actions Card */
+.quick-actions-card {
+  background: #FFFFFF;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  border: 1px solid #E4DCCF;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.quick-actions-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+.quick-actions-header {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 2px solid #E4DCCF;
+  background: rgba(209, 184, 157, 0.1);
+  color: #2E2E2E;
+}
+
+.quick-actions-content {
+  padding: 0;
+  background: #FFFFFF;
+}
+
+.quick-action-btn {
+  display: flex;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #E4DCCF;
+  text-decoration: none;
+  color: #2E2E2E;
+  transition: all 0.2s ease;
+}
+
+.quick-action-btn:last-child {
+  border-bottom: none;
+}
+
+.quick-action-btn:hover {
+  background-color: rgba(183, 121, 31, 0.1);
+  color: #2E2E2E;
+  text-decoration: none;
+  transform: translateX(5px);
+}
+
+.quick-action-btn i {
+  font-size: 1.1rem;
+}
+
+.quick-action-btn span {
+  flex: 1;
+  font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .welcome-card {
+    padding: 1.5rem;
+  }
+
+  .welcome-icon {
+    font-size: 2.5rem;
+  }
+
+  .welcome-title {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .navbar-brand span {
+    display: none;
+  }
+
+  .welcome-card {
+    padding: 1rem;
+  }
+
+  .welcome-icon {
+    font-size: 2rem;
+  }
+
+  .welcome-title {
+    font-size: 1.25rem;
+  }
+
+  .quick-action-btn {
+    padding: 0.75rem 1rem;
+  }
+}
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
